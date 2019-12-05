@@ -7,6 +7,7 @@ const logger = require('morgan');
 const TimestampRoute = require('../api/timestampRoute');
 const TransactionRoute = require('../api/transactionRoute');
 const TransactionStatsRoute = require('../api/transactionStatsRoute');
+const scorePostRoute = require('../api/scorePostRoute');
 
 server.use(logger('dev'));
 
@@ -17,5 +18,6 @@ server.use(allowCors);
 TimestampRoute(server);
 TransactionRoute(server);
 TransactionStatsRoute(server);
+scorePostRoute(server);
 
 module.exports = server;
