@@ -31,6 +31,28 @@ class TransactionService {
     });
   }
 
+  getUserStats({ UserId }) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const transactionRepository = new TransactionRepository();
+        const userTransactions = await transactionRepository.getUserTransactions(UserId);
+
+        let currencySum = 0;
+        for (let i = 0; i< userTransactions.length; i++) {
+          currencySum += userTransactions[i].CurrencyAmount;
+        }
+
+        resolve({
+          "UserId": UserId,
+          "TransactionCount": userTransactions.length,
+          "CurrencySum": currencySum
+          });
+      } catch(ex) {
+        reject(ex)
+      }
+    });
+  }
+
   generateHash(transaction) {
     return `TransactionId=${transaction.TransactionId}UserId=${transaction.UserId}CurrencyAmount=${transaction.CurrencyAmount}`;
   }

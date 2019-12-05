@@ -21,6 +21,14 @@ class TransactionRepository {
       throw ex;
     }
   }
+
+  async getUserTransactions(userId) {
+    try {
+      return await Transaction.find({ UserId: userId });
+    } catch (ex) {
+      throw ex;
+    }
+  }
 }
 
 module.exports = TransactionRepository;
