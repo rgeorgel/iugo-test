@@ -1,5 +1,7 @@
 const server = require('./config/server');
 
+require('./config/database');
+
 const port = process.env.port || 3003
 server.listen(
   port,

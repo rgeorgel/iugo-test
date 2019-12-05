@@ -5,6 +5,7 @@ const allowCors = require('./cors');
 const logger = require('morgan');
 
 const TimestampRoute = require('../api/timestampRoute');
+const TransactionRoute = require('../api/transactionRoute');
 
 server.use(logger('dev'));
 
@@ -13,5 +14,6 @@ server.use(bodyParser.json());
 server.use(allowCors);
 
 TimestampRoute(server);
+TransactionRoute(server);
 
 module.exports = server;
