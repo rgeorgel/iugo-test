@@ -39,6 +39,18 @@ class LeaderboardRepository {
     }
   }
 
+  async getAll(offset, limit) {
+    try {
+      return await Leaderboard
+        .find()
+        .sort({ Score: 'desc' })
+        .skip(offset)
+        .limit(limit);
+    } catch (ex) {
+      throw ex;
+    }
+  }
+
   async userHasBiggerScore(userId, leaderboard, score) {
     try {
       const userLB = await Leaderboard.find({
@@ -55,12 +67,10 @@ class LeaderboardRepository {
 
   async getUser(userId, leaderboard) {
     try {
-      const userLB = await Leaderboard.find({
+      return await Leaderboard.find({
         UserId: userId,
         LeaderboardId: leaderboard
       });
-
-      return userLB.length > 0 ? userLB : null;
     } catch (ex) {
       throw ex;
     }
