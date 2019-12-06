@@ -9,6 +9,7 @@ const TransactionRoute = require('../api/transactionRoute');
 const TransactionStatsRoute = require('../api/transactionStatsRoute');
 const ScorePostRoute = require('../api/scorePostRoute');
 const LeaderboardGetRoute = require('../api/leaderboardGetRoute');
+const UserSaveRoute = require('../api/userSaveRoute');
 
 server.use(logger('dev'));
 
@@ -21,5 +22,6 @@ TransactionRoute(server);
 TransactionStatsRoute(server);
 ScorePostRoute(server);
 LeaderboardGetRoute(server);
+UserSaveRoute(server);
 
 module.exports = server;

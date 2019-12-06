@@ -6,7 +6,7 @@ class LeaderboardRepository {
       try {
         if (! await this.userHasBiggerScore(newScore.UserId, newScore.LeaderboardId, newScore.Score)) {
           const user = await this.getUser(newScore.UserId, newScore.LeaderboardId);
-          
+
           if (!user) {
             let leaderboard = new Leaderboard();
             leaderboard.UserId = newScore.UserId;
