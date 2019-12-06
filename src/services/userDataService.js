@@ -1,4 +1,5 @@
 const UserDataRepository = require('../repository/userDateRepository');
+const _ = require('lodash');
 
 class LeaderboardService {
   constructor() {
@@ -18,16 +19,46 @@ class LeaderboardService {
     });
   }
 
+  get (userData) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const userDataRepository = new UserDataRepository();
+        const allData = await userDataRepository.getAllUserData(userData.UserId);
+
+        let result = {};
+        for (let i = 0; i < allData.length; i++) {
+          const value = allData[i].type === 'number' ? Number(allData[i].value) : allData[i].value;
+
+          this.mountObjectFromDatabase(allData[i].hash, value, result);
+        }
+
+        resolve(result);
+      } catch(ex) {
+        reject(ex);
+      }
+    });
+  }
+
+  mountObjectFromDatabase (hash, value, obj) {
+    const objPath = hash.replace(/\>/g,'.');
+    _.set(obj, objPath, value);
+  }
+
   preparehash (obj) {
+    // get all keys of object
     let keys = Object.keys(obj);
     for (let i in keys) {
-      this.hash += `${keys[i]}>`;
+      // save the key to be used as an identifier
+      this.hash += `>${keys[i]}`;
+      // if is object do the process again because has more levels on the hierarchy
       if (typeof obj[keys[i]] === 'object') {
         this.preparehash(obj[keys[i]]);
       } else {
+        // if not it's the final value of this 'path'
         this.listOfHash.push({
-          hash: this.hash, 
-          value: obj[keys[i]]
+          hash: this.hash.substring(1),
+          value: obj[keys[i]],
+          type: typeof obj[keys[i]]
         });
 
         this.hash = '';

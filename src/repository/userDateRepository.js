@@ -11,12 +11,14 @@ class UserDataRepository {
           userData.UserId = request.UserId;
           userData.hash = request.hash;
           userData.value = request.value;
+          userData.type = request.type;
 
           await userData.save();
         } else {
           await UserData.updateOne({_id: userData[0]._id}, {
             $set: { 
-              value: request.value
+              value: request.value,
+              type: request.type
             }
           });
         }
@@ -26,6 +28,16 @@ class UserDataRepository {
         reject(ex);
       }
     });
+  }
+
+  async getAllUserData(userId) {
+    try {
+      return await UserData.find({
+        UserId: userId
+      });
+    } catch (ex) {
+      throw ex;
+    }
   }
 
   async getUserData(hash, userId) {
