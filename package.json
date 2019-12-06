@@ -5,7 +5,8 @@
   "main": "src/loader.js",
   "scripts": {
     "start": "nodemon",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "production": "pm2 start src/loader.js --name iugo-api"
   },
   "author": "Ricardo Georgel",
   "license": "ISC",
@@ -15,6 +16,7 @@
     "lodash": "^4.17.15",
     "mongoose": "^5.7.13",
     "morgan": "^1.9.1",
+    "pm2": "^4.2.0",
     "sha1": "^1.1.1"
   },
   "devDependencies": {
