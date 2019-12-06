@@ -7,10 +7,6 @@ node.js API to be used on IUGO's assessment
 > docker-compose up -d
 ## Install dependencies
 >npm i
-## Execute migrations
->npx sequelize db:migrate
-## Execute seeds
->npx sequelize db:seed:all
 
 # How to run
 ## To run in development mode
@@ -19,3 +15,11 @@ node.js API to be used on IUGO's assessment
 
 ### To start the application
 > **npm start**
+
+
+# How to run test
+### To start the database
+> docker-compose up -d
+
+### To start the application
+> **npm test**
