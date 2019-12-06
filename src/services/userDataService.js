@@ -44,30 +44,22 @@ class LeaderboardService {
     _.set(obj, objPath, value);
   }
 
-  preparehash (obj) {
-    // get all keys of object
-    let keys = Object.keys(obj);
-    for (let i in keys) {
-      // save the key to be used as an identifier
-      this.hash += `>${keys[i]}`;
-      // if is object do the process again because has more levels on the hierarchy
-      if (typeof obj[keys[i]] === 'object') {
-        this.preparehash(obj[keys[i]]);
+  flatten (obj, prefix = '') {
+    _.forEach(obj, (value, key) => {
+      if (_.isObject(value)) {
+        this.flatten(value, `${prefix}${key}>`);
       } else {
-        // if not it's the final value of this 'path'
         this.listOfHash.push({
-          hash: this.hash.substring(1),
-          value: obj[keys[i]],
-          type: typeof obj[keys[i]]
+          hash: `${prefix}${key}`,
+          value: value,
+          type: typeof value
         });
-
-        this.hash = '';
       }
-    }
+    });
   }
 
   async prepareObject(userData) {
-    await this.preparehash(userData.Data);
+    await this.flatten(userData.Data);
 
     for (let i = 0; i < this.listOfHash.length; i++) {
       const userDataRepository = new UserDataRepository();
