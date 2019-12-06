@@ -11,6 +11,7 @@ const ScorePostRoute = require('../api/scorePostRoute');
 const LeaderboardGetRoute = require('../api/leaderboardGetRoute');
 const UserSaveRoute = require('../api/userSaveRoute');
 const UserLoadRoute = require('../api/userLoadRoute');
+const DatabaseCleanerRoute = require('../api/databaseCleanerRoute');
 
 server.use(logger('dev'));
 
@@ -25,5 +26,6 @@ ScorePostRoute(server);
 LeaderboardGetRoute(server);
 UserSaveRoute(server);
 UserLoadRoute(server);
+DatabaseCleanerRoute(server);
 
 module.exports = server;
