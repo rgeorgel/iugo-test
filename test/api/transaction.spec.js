@@ -4,10 +4,21 @@ const request = supertest(server);
 const Error = require('../../src/models/error');
 const mongoose = require('mongoose')
 
-beforeAll(async () => {
-  const url = `mongodb://iugo:iugo@localhost:27017/admin?ssl=false`;
-  await mongoose.connect(url, { useNewUrlParser: true });
-})
+beforeEach(async (done) => {
+  function clearCollections() {
+    for (var collection in mongoose.connection.collections) {
+      mongoose.connection.collections[collection].remove(function() {});
+    }
+    return done();
+  }
+
+  if (mongoose.connection.readyState === 0) {
+    const url = `mongodb://iugo:iugo@localhost:27017/admin?ssl=false`;
+    await mongoose.connect(url, { useNewUrlParser: true });
+  }
+
+  return clearCollections();
+});
 
 describe('Transaction endpoint', () => {
   test('Try to save transaction with invalid Verifier', async (done) => {
@@ -60,11 +71,8 @@ describe('Transaction endpoint', () => {
       "Verifier": "fd6b91387c2853ac8467bb4d90eac30897777fc6"
     };
 
-    request.post('/Transaction')
-      .send(transaction)
-      .expect('Content-Type', /json/)
-      .expect(200)
-      .end();
+    await request.post('/Transaction')
+      .send(transaction);
 
     request.post('/Transaction')
       .send(transaction)

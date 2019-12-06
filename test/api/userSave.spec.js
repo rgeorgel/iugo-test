@@ -1,7 +1,6 @@
 const server = require('../../src/config/server');
 const supertest = require('supertest');
 const request = supertest(server);
-const Error = require('../../src/models/error');
 const mongoose = require('mongoose')
 
 beforeAll(async () => {
@@ -9,34 +8,35 @@ beforeAll(async () => {
   await mongoose.connect(url, { useNewUrlParser: true });
 })
 
-describe('transactionStats endpoint', () => {
-  test('get all user transactions', async (done) => {
-    const transaction = {
-      "TransactionId": 5,
-      "UserId": 5,
-      "CurrencyAmount": 6,
-      "Verifier": "82cc28da5637a2880792618561b194522e2b0ce9"
+describe('UserSave endpoint', () => {
+  test('Save user data', async (done) => {
+    const userData = {
+      "UserId": 1,
+      "Data": {
+        "Piece1": {
+          "SubData": 1234,
+          "SubData2": "abcd"
+        },
+        "Piece2": {
+          "SubData": {
+            "SubSubData": 5678
+          }
+        },
+        "Piece3": 3,
+        "Piece4": "5"
+      }
     };
 
-    await request.post('/Transaction')
-      .send(transaction);
-
-    const data = {
-      "UserId": 5
-    };
-
-    request.post('/TransactionStats')
-      .send(data)
+    request.post('/UserSave')
+      .send(userData)
       .expect('Content-Type', /json/)
       .expect(200)
       .end(function (err, res) {
         if (err) return done(err);
 
         const expectedresponse = {
-          "UserId": 5,
-          "TransactionCount": 1,
-          "CurrencySum": 6
-        }
+          "Success": true
+        };
 
         expect(expectedresponse).toEqual(res.body);
 
